@@ -1267,7 +1267,8 @@ class BloomForQuestionAnswering(BloomPreTrainedModel):
         start_logits, end_logits = logits.split(1, dim=-1)
         start_logits = start_logits.squeeze(-1).contiguous()
         end_logits = end_logits.squeeze(-1).contiguous()
-
+        print(start_positions)
+        print(end_positions)
         total_loss = None
         if start_positions is not None and end_positions is not None:
             # If we are on multi-GPU, split add a dimension
@@ -1291,6 +1292,7 @@ class BloomForQuestionAnswering(BloomPreTrainedModel):
         if not return_dict:
             output = (start_logits, end_logits) + outputs[2:]
             print("returning another")
+            print(output)
             return ((total_loss,) + output) if total_loss is not None else output
 
         return QuestionAnsweringModelOutput(
