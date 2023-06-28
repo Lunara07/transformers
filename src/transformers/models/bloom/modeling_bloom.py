@@ -1249,7 +1249,7 @@ class BloomForQuestionAnswering(BloomPreTrainedModel):
             are not taken into account for computing the loss.
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-
+        print(return_dict)
         outputs = self.transformer(
             input_ids,
             attention_mask=attention_mask,
@@ -1281,12 +1281,16 @@ class BloomForQuestionAnswering(BloomPreTrainedModel):
             end_positions = end_positions.clamp(0, ignored_index)
 
             loss_fct = CrossEntropyLoss(ignore_index=ignored_index)
+            
             start_loss = loss_fct(start_logits, start_positions)
             end_loss = loss_fct(end_logits, end_positions)
             total_loss = (start_loss + end_loss) / 2
+            print("loss calcuated")
+        print(total_loss)
 
         if not return_dict:
             output = (start_logits, end_logits) + outputs[2:]
+            print("returning another")
             return ((total_loss,) + output) if total_loss is not None else output
 
         return QuestionAnsweringModelOutput(
